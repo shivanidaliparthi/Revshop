@@ -1,0 +1,267 @@
+package com.revshop.ui;
+
+import java.util.Scanner;
+import com.revshop.dao.UserDAO;
+import com.revshop.model.User;
+import com.revshop.service.*;
+
+public class Main {
+
+    public static  void main(String[] args) {
+    
+
+        Scanner sc = new Scanner(System.in);
+        UserDAO dao = new UserDAO();
+
+        BuyerService buyer = new BuyerService();
+        SellerService seller = new SellerService();
+
+        int ch;
+        do {
+            System.out.println("1.Register 2.Login 3.Forgot 4.Exit");
+            ch = sc.nextInt();
+            sc.nextLine();
+
+            switch (ch) {
+                case 1:
+                    User u = new User();
+                    System.out.println("Name:");
+                    u.setName(sc.nextLine());
+                    System.out.println("Email:");
+                    u.setEmail(sc.nextLine());
+                    System.out.println("Password:");
+                    u.setPassword(sc.nextLine());
+                    System.out.println("Role:");
+                    u.setRole(sc.nextLine());
+                    System.out.println("Question:");
+                    u.setQuestion(sc.nextLine());
+                    System.out.println("Answer:");
+                    u.setAnswer(sc.nextLine());
+                    dao.register(u);
+                   // boolean registered = dao.register(u);
+
+                    
+                    break;
+
+                case 2:
+                    System.out.println("Email:");
+                    String e = sc.nextLine();
+                    System.out.println("Password:");
+                    String p = sc.nextLine();
+                    User user = dao.login(e, p);
+                    if (user != null) {
+                        System.out.println("✅ Login successful. Welcome " + user.getName());
+                   
+                        if ("BUYER".equalsIgnoreCase(user.getRole()))
+                            buyer.buyerMenu(user, sc);
+                        else
+                            seller.sellerMenu(sc);
+                        }else {
+                        System.out.println("❌ Invalid email or password.");
+                        }
+                        break;
+
+                case 3:
+                    System.out.println("Email:");
+                    String em = sc.nextLine();
+                    System.out.println("Question:");
+                    String q = sc.nextLine();
+                    System.out.println("Answer:");
+                    String a = sc.nextLine();
+                    System.out.println("New Password:");
+                    String np = sc.nextLine();
+                    dao.forgotPassword(em, q, a, np);
+                    boolean reset = dao.forgotPassword(em, q, a, np);
+
+                    if (reset) {
+                        System.out.println("✅ Password updated successfully. Please login.");
+                    } else {
+                        System.out.println("❌ Details mismatch. Password not updated.");
+                    }
+                    break;
+            }
+        } while (ch != 4);
+
+        sc.close();
+    }
+}
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+////package com.revshop.ui;
+//
+//import java.util.Scanner;
+//import com.revshop.dao.UserDAO;
+//import com.revshop.model.User;
+//import com.revshop.service.*;
+//
+//public class Main {
+//
+//    public static void main(String[] args) {
+//
+//        Scanner sc = new Scanner(System.in);
+//        UserDAO dao = new UserDAO();
+//
+//        BuyerService buyer = new BuyerService();
+//        SellerService seller = new SellerService();
+//
+//        int ch;
+//        do {
+//            System.out.println("\n1.Register 2.Login 3.Forgot 4.Exit");
+//            ch = sc.nextInt();
+//            sc.nextLine(); // consume newline
+//
+//            switch (ch) {
+//
+//                // ================= REGISTER =================
+//                case 1:
+//                    User u = new User();
+//
+//                    System.out.println("Name:");
+//                    u.setName(sc.nextLine());
+//
+//                    System.out.println("Email:");
+//                    u.setEmail(sc.nextLine());
+//
+//                    System.out.println("Password:");
+//                    u.setPassword(sc.nextLine());
+//
+//                    System.out.println("Role (BUYER / SELLER):");
+//                    u.setRole(sc.nextLine());
+//
+//                    System.out.println("Question:");
+//                    u.setQuestion(sc.nextLine());
+//
+//                    System.out.println("Answer:");
+//                    u.setAnswer(sc.nextLine());
+//
+//                    boolean registered = dao.register(u);
+//
+//                    if (registered) {
+//                        System.out.println("✅ Registration successful. Please login.");
+//                    } else {
+//                        System.out.println("❌ Email already exists. Try login.");
+//                    }
+//                    break;
+//
+//                // ================= LOGIN =================
+//                case 2:
+//                    System.out.println("Email:");
+//                    String e = sc.nextLine();
+//
+//                    System.out.println("Password:");
+//                    String p = sc.nextLine();
+//
+//                    User user = dao.login(e, p);
+//
+//                    if (user != null) {
+//                        System.out.println("✅ Login successful.");
+//
+//                        // TEMP safety (until name/role are stored in DB)
+//                        String role = user.getRole();
+//                        if (role == null) {
+//                            System.out.println("⚠ Role not found. Defaulting to BUYER.");
+//                            buyer.buyerMenu(user, sc);
+//                        } else if ("BUYER".equalsIgnoreCase(role)) {
+//                            buyer.buyerMenu(user, sc);
+//                        } else {
+//                            seller.sellerMenu(sc);
+//                        }
+//
+//                    } else {
+//                        System.out.println("❌ Invalid email or password.");
+//                    }
+//                    break;
+//
+//                // ================= FORGOT PASSWORD =================
+//                case 3:
+//                    System.out.println("Email:");
+//                    String em = sc.nextLine();
+//
+//                    System.out.println("Question:");
+//                    String q = sc.nextLine();
+//
+//                    System.out.println("Answer:");
+//                    String a = sc.nextLine();
+//
+//                    System.out.println("New Password:");
+//                    String np = sc.nextLine();
+//
+//                    boolean reset = dao.forgotPassword(em, q, a, np);
+//
+//                    if (reset) {
+//                        System.out.println("✅ Password updated successfully. Please login.");
+//                    } else {
+//                        System.out.println("❌ Details mismatch. Password not updated.");
+//                    }
+//                    break;
+//
+//                // ================= EXIT =================
+//                case 4:
+//                    System.out.println("👋 Exiting application...");
+//                    break;
+//
+//                default:
+//                    System.out.println("❌ Invalid choice.");
+//            }
+//
+//        } while (ch != 4);
+//
+//        sc.close();
+//    }
+////
+////
+////
+////
+////
+////
+////
+////
+////
+//

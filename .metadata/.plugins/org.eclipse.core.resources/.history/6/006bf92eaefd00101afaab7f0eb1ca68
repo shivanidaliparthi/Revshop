@@ -1,0 +1,38 @@
+package com.revshop.test;
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+import com.revshop.dao.UserDAO;
+import com.revshop.model.User;
+
+public class UserDAOForgotPasswordTest {
+
+    @Test
+    public void testForgotPasswordSuccess() {
+
+        UserDAO dao = new UserDAO();
+
+        // Step 1: create & register user
+        User user = new User();
+        user.setName("Forgot User");
+        user.setEmail("forgot@gmail.com");
+        user.setPassword("oldpass");
+        user.setRole("BUYER");
+        user.setQuestion("pet name");
+        user.setAnswer("tom");
+
+        dao.register(user);
+
+        // Step 2: attempt password reset
+        boolean result = dao.forgotPassword(
+                "forgot@gmail.com",
+                "pet name",
+                "tom",
+                "newpass123"
+        );
+
+        // Step 3: verify result
+        assertTrue(result);
+    }
+}

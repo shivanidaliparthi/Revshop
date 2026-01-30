@@ -1,0 +1,26 @@
+package com.revshop.test;
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+import java.util.Date;
+import com.revshop.model.Order;
+
+public class OrderDAOTest {
+
+    @Test
+    public void testOrderMapping() {
+        Order order = new Order();
+        
+        // Matching Oracle 'Number' (int/long) and 'Number(10,2)' (double)
+        order.setOrderId(1001);
+        order.setBuyerId(50);
+        order.setTotalAmount(1500.75);
+        order.setOrderDate(new Date()); // Matches 'Date' column
+
+        assertEquals(1001, order.getOrderId());
+        assertEquals(50, order.getBuyerId());
+        // Use delta 0.001 for double comparison in Java 7
+        assertEquals(1500.75, order.getTotalAmount(), 0.001);
+        assertNotNull(order.getOrderDate());
+    }
+}

@@ -1,0 +1,78 @@
+package com.revshop.test;
+
+
+
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+public class UserServiceTest {
+
+    private UserService userService;
+
+    @Before
+    public void setUp() {
+        userService = new UserService();
+    }
+
+    // ===============================
+    // 1. REGISTRATION (MANDATORY)
+    // ===============================
+
+    @Test
+    public void testRegisterSuccess() {
+        boolean result = userService.register(
+                "user@test.com", "pass123", "BUYER");
+        assertTrue(result);
+    }
+
+    @Test
+    public void testRegisterDuplicateUser() {
+        userService.register("user@test.com", "pass123", "BUYER");
+        boolean result = userService.register(
+                "user@test.com", "newpass", "BUYER");
+        assertFalse(result);
+    }
+
+    // ===============================
+    // 2. LOGIN (MANDATORY)
+    // ===============================
+
+    @Test
+    public void testLoginSuccess() {
+        userService.register("login@test.com", "pass123", "BUYER");
+        boolean result = userService.login(
+                "login@test.com", "pass123");
+        assertTrue(result);
+    }
+
+    @Test
+    public void testLoginFailureWrongPassword() {
+        userService.register("login2@test.com", "pass123", "BUYER");
+        boolean result = userService.login(
+                "login2@test.com", "wrongpass");
+        assertFalse(result);
+    }
+
+    // ===============================
+    // 3. FORGOT PASSWORD (MANDATORY)
+    // ===============================
+
+    @Test
+    public void testForgotPasswordSuccess() {
+        userService.register("forgot@test.com", "oldpass", "BUYER");
+        boolean result = userService.forgotPassword(
+                "forgot@test.com", "newpass");
+        assertTrue(result);
+    }
+
+    @Test
+    public void testForgotPasswordAndLogin() {
+        userService.register("reset@test.com", "old123", "BUYER");
+        userService.forgotPassword("reset@test.com", "new123");
+
+        boolean loginResult = userService.login(
+                "reset@test.com", "new123");
+        assertTrue(loginResult);
+    }
+}
