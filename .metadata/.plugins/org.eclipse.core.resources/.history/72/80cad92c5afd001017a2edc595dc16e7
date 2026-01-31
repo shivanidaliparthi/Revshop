@@ -1,0 +1,28 @@
+package com.revshop.dao;
+
+import com.revshop.model.Order;
+import java.util.ArrayList;
+import java.util.List;
+
+public class OrderDAO {
+
+    private static List<Order> orders = new ArrayList<Order>();
+    private static int orderId = 0;
+
+    public void placeOrder(Order order) {
+        orders.add(order);
+    }
+
+    public List<Order> getOrdersByBuyer(int buyerId) {
+        List<Order> result = new ArrayList<Order>();
+        for (Order o : orders) {
+            if (o.getBuyerId() == buyerId)
+                result.add(o);
+        }
+        return result;
+    }
+
+    public int getNextOrderId() {
+        return ++orderId;
+    }
+}

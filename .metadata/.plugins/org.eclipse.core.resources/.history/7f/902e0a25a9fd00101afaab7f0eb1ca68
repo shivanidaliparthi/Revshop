@@ -1,0 +1,5 @@
+package com.revshop.exceptions;
+
+public class UserNotFoundException {
+
+}

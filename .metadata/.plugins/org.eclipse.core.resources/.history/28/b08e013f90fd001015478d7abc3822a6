@@ -1,0 +1,35 @@
+package com.revshop.test;
+
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import com.revshop.dao.ProductDAO;
+import com.revshop.model.Product;
+
+public class ProductDAOTest {
+    
+    private ProductDAO productDAO;
+
+    @Before
+    public void setUp() {
+        // Initialize your DAO before each test
+        productDAO = new ProductDAO();
+    }
+
+    @Test
+    public void testGetProductById() {
+        // Act: Fetch a product that should exist in your test DB
+        Product product = productDAO.getProductById(101);
+        
+        // Assert: Java 7 style assertions
+        assertNotNull("Product should not be null", product);
+        assertEquals("Laptop", product.getName());
+        assertTrue(product.getPrice() > 0);
+    }
+
+    @Test
+    public void testInvalidProductSearch() {
+        Product product = productDAO.getProductById(-99);
+        assertNull(product);
+    }
+}

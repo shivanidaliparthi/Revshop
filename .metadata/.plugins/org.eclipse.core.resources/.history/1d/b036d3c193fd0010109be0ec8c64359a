@@ -1,0 +1,266 @@
+package com.revshop.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import com.revshop.dao.*;
+import com.revshop.model.*;
+
+public class BuyerService {
+
+    private ProductDAO productDAO = new ProductDAO();
+    private OrderDAO orderDAO = new OrderDAO();
+    private ReviewDAO reviewDAO = new ReviewDAO();
+    private NotificationService notify = new NotificationService();
+
+    private List<CartItem> cart = new ArrayList<CartItem>();
+
+    public void buyerMenu(User buyer, Scanner sc) {
+
+        int ch;
+        do {
+            System.out.println("1.View Products 2.Add Cart 3.Place Order 4.Review 5.Exit");
+            ch = sc.nextInt();
+
+            switch (ch) {
+                case 1:
+                    for (Product p : productDAO.getAll()) {
+                        System.out.println(p.getName()
+                                + " MRP:" + p.getMrp()
+                                + " Discount:" + p.getDiscount()
+                                + " Price:" + p.getSellingPrice());
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Product Id: ");
+                    int id = sc.nextInt();
+                    System.out.print("Qty: ");
+                    int q = sc.nextInt();
+                    cart.add(new CartItem(productDAO.getById(id), q));
+                    break;
+
+                case 3:
+                    Order order = new Order(orderDAO.nextOrderId(),
+                            buyer.getId(), cart);
+                    orderDAO.save(order);
+                    notify.notifyBuyer("Order placed successfully!");
+                    notify.notifySeller("New order received!");
+                    cart.clear();
+                    break;
+
+                case 4:
+                    System.out.print("Product Id: ");
+                    int pid = sc.nextInt();
+                    System.out.print("Rating: ");
+                    int r = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Comment: ");
+                    String c = sc.nextLine();
+                    reviewDAO.addReview(
+                        new Review(pid, buyer.getId(), r, c));
+                    break;
+            }
+        } while (ch != 5);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//package com.revshop.service;
+//
+//
+//
+//
+//
+//import java.util.Scanner;
+//
+//public class BuyerService {
+//
+//    public void buyerMenu() {
+//        Scanner sc = new Scanner(System.in);
+//        int choice;
+//
+//        do {
+//            System.out.println("\n--- BUYER MENU ---");
+//            System.out.println("1. View Products");
+//            System.out.println("2. Add to Cart");
+//            System.out.println("3. View Orders");
+//            System.out.println("4. Logout");
+//
+//            choice = sc.nextInt();
+//
+//            switch (choice) {
+//                case 1:
+//                    System.out.println("Viewing products...");
+//                    break;
+//                case 2:
+//                    System.out.println("Product added to cart");
+//                    break;
+//                case 3:
+//                    System.out.println("Viewing order history");
+//                    break;
+//                case 4:
+//                    System.out.println("Logout successful");
+//                    break;
+//                default:
+//                    System.out.println("Invalid option");
+//            }
+//        } while (choice != 4);
+//    }
+//}
+
+
+
+
+
+
+//package com.revshop.service;
+//
+//import com.revshop.dao.OrderDAO;
+//import com.revshop.dao.ProductDAO;
+//import com.revshop.model.*;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//import java.util.Scanner;
+//
+//public class BuyerService {
+//
+//    private ProductDAO productDAO = new ProductDAO();
+//    private OrderDAO orderDAO = new OrderDAO();
+//    private CartService cartService = new CartService();
+//
+//    public void buyerMenu(User buyer, Scanner sc) {
+//        int choice;
+//
+//        do {
+//            System.out.println("\n--- BUYER MENU ---");
+//            System.out.println("1. View Products");
+//            System.out.println("2. Add To Cart");
+//            System.out.println("3. View Cart");
+//            System.out.println("4. Checkout");
+//            System.out.println("5. View Orders");
+//            System.out.println("6. Logout");
+//
+//            choice = sc.nextInt();
+//
+//            switch (choice) {
+//                case 1: viewProducts(); break;
+//                case 2: addToCart(sc); break;
+//                case 3: viewCart(); break;
+//                case 4: checkout(buyer); break;
+//                case 5: viewOrders(buyer); break;
+//                case 6: System.out.println("Logged out"); break;
+//                default: System.out.println("Invalid choice");
+//            }
+//        } while (choice != 6);
+//    }
+//
+//    private void viewProducts() {
+//        for (Product p : productDAO.getAllProducts()) {
+//            System.out.println(p.getId() + " " + p.getName()
+//                    + " " + p.getCategory() + " ₹" + p.getPrice());
+//        }
+//    }
+//
+//    private void addToCart(Scanner sc) {
+//        System.out.print("Product ID: ");
+//        int id = sc.nextInt();
+//        Product p = productDAO.getById(id);
+//
+//        if (p == null) {
+//            System.out.println("Product not found");
+//            return;
+//        }
+//
+//        System.out.print("Quantity: ");
+//        int qty = sc.nextInt();
+//        cartService.addToCart(p, qty);
+//        System.out.println("Added to cart");
+//    }
+//
+//    private void viewCart() {
+//        for (CartItem c : cartService.getCartItems()) {
+//            System.out.println(c.getProduct().getName()
+//                    + " x " + c.getQuantity());
+//        }
+//        System.out.println("Total: ₹" + cartService.getTotal());
+//    }
+//
+//    private void checkout(User buyer) {
+//        if (cartService.isEmpty()) {
+//            System.out.println("Cart empty");
+//            return;
+//        }
+//
+//        List<OrderItem> items = new ArrayList<OrderItem>();
+//        for (CartItem c : cartService.getCartItems()) {
+//            items.add(new OrderItem(c.getProduct(), c.getQuantity()));
+//        }
+//
+//        Order order = new Order(
+//                orderDAO.getNextOrderId(),
+//                buyer.getId(),
+//                items,
+//                cartService.getTotal());
+//
+//        orderDAO.placeOrder(order);
+//        cartService.clearCart();
+//        System.out.println("Order placed successfully!");
+//    }
+//
+//    private void viewOrders(User buyer) {
+//        List<Order> orders = orderDAO.getOrdersByBuyer(buyer.getId());
+//        for (Order o : orders) {
+//            System.out.println("Order ID: " + o.getOrderId()
+//                    + " Amount: ₹" + o.getTotalAmount());
+//        }
+//    }
+//}
+//
+//
+//
+//
