@@ -1,0 +1,9 @@
+#Sat Jan 31 09:17:32 IST 2026
+eclipse.preferences.version=1
+encoding//src/com/revshop/dao/ProductDAO.java=UTF-8
+encoding//src/com/revshop/dao/UserDAO.java=UTF-8
+encoding//src/com/revshop/model/CartItem.java=UTF-8
+encoding//src/com/revshop/model/Product.java=UTF-8
+encoding//src/com/revshop/service/BuyerService.java=UTF-8
+encoding//src/com/revshop/service/SellerService.java=UTF-8
+encoding//src/com/revshop/ui/Main.java=UTF-8
