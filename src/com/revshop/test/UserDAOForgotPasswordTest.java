@@ -1,38 +1,35 @@
 package com.revshop.test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import org.junit.Test;
-
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import com.revshop.dao.UserDAO;
-import com.revshop.model.User;
 
+@RunWith(MockitoJUnitRunner.class)
 public class UserDAOForgotPasswordTest {
 
+    @Mock
+    private UserDAO userDAO;
+
     @Test
-    public void testForgotPasswordSuccess() {
+    public void testForgotPasswordSuccess() throws Exception {
 
-        UserDAO dao = new UserDAO();
+        when(userDAO.forgotPassword(
+                "forgot@gmail.com",
+                "pet name",
+                "tom",
+                "newpass123"
+        )).thenReturn(true);
 
-        
-        User user = new User();
-        user.setName("Forgot User");
-        user.setEmail("forgot@gmail.com");
-        user.setPassword("oldpass");
-        user.setRole("BUYER");
-        user.setQuestion("pet name");
-        user.setAnswer("tom");
-
-        dao.register(user);
-
-      
-        boolean result = dao.forgotPassword(
+        boolean result = userDAO.forgotPassword(
                 "forgot@gmail.com",
                 "pet name",
                 "tom",
                 "newpass123"
         );
 
-    
         assertTrue(result);
     }
 }

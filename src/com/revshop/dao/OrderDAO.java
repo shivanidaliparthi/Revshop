@@ -1,17 +1,11 @@
-
 package com.revshop.dao;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-//import java.util.Date;
-
 import com.revshop.model.Order;
 import com.revshop.util.DBConnection;
-
 public class OrderDAO {
 
-  
     public int createOrder(int buyerId, double totalAmount) {
 
         Connection con = null;
@@ -83,8 +77,6 @@ public class OrderDAO {
         }
         return order;
     }
-
-
     private int nextId() {
 
         Connection con = null;

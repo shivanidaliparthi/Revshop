@@ -1,8 +1,5 @@
-
 package com.revshop.model;
-
 public class Product {
-
     private int id;
     private String name;
     private String category;
@@ -19,8 +16,6 @@ public class Product {
         this.discount = discount;
         this.stock = stock;
     }
-
-   
     public int getId() { return id; }
     public String getName() { return name; }
     public String getCategory() { return category; }
@@ -31,18 +26,10 @@ public class Product {
     public void setStock(int stock) {
         this.stock = stock;
     }
-
-
     public double getSellingPrice() {
         return mrp - (mrp * discount / 100);
     }
-
-
     public double getPrice() {
         return getSellingPrice();
     }
 }
-
-
-
-

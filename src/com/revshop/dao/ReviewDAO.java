@@ -1,18 +1,13 @@
-
 package com.revshop.dao;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.revshop.model.Review;
 import com.revshop.util.DBConnection;
-
 public class ReviewDAO {
 
-    // ADD REVIEW
     public void addReview(Review r) {
 
         Connection con = null;
@@ -45,8 +40,6 @@ public class ReviewDAO {
             }
         }
     }
-
-    // GET ALL REVIEWS
     public List<Review> getAll() {
 
         List<Review> list = new ArrayList<Review>();
@@ -124,8 +117,6 @@ public class ReviewDAO {
         }
         return list;
     }
-
-    // NEXT REVIEW ID
     private int nextId() {
 
         int id = 1;

@@ -1,5 +1,4 @@
 package com.revshop.model;
-
 public class OrderItem {
     private Product product;
     private int quantity;
@@ -10,7 +9,6 @@ public class OrderItem {
         this.quantity = quantity;
         this.price = product.getPrice() * quantity;
     }
-
     public Product getProduct() { return product; }
     public int getQuantity() { return quantity; }
     public double getPrice() { return price; }

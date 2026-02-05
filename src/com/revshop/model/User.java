@@ -1,7 +1,5 @@
 package com.revshop.model;
-
 public class User {
-
     private int id;
     private String name;
     private String email;
@@ -9,9 +7,7 @@ public class User {
     private String role; // BUYER / SELLER
     private String question;
     private String answer;
-
     public User() {}
-
     public User(int id, String name, String email, String password,
                 String role, String question, String answer) {
         this.id = id;
@@ -22,7 +18,6 @@ public class User {
         this.question = question;
         this.answer = answer;
     }
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -44,53 +39,3 @@ public class User {
     public String getAnswer() { return answer; }
     public void setAnswer(String answer) { this.answer = answer; }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,17 +1,13 @@
 package com.revshop.dao;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.revshop.model.Product;
 import com.revshop.util.DBConnection;
-
 public class ProductDAO {
 
-    // ADD PRODUCT
     public boolean addProduct(Product p) {
 
         Connection con = null;
@@ -19,14 +15,12 @@ public class ProductDAO {
 
         try {
             con = DBConnection.getConnection();
-
         
             String sql =
                 "INSERT INTO PRODUCTS " +
                 "(PRODUCT_ID, NAME, CATEGORY, MRP, DISCOUNT_PRICE, DISCOUNT_PERCENT, STOCK) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-          
+         
             double discountPercent = p.getDiscount();
             double discountPrice = p.getMrp() * discountPercent / 100;
 

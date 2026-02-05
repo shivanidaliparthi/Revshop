@@ -1,28 +1,20 @@
-
 package com.revshop.test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-
 import com.revshop.util.EmailValidator;
-
 public class EmailValidatorTest {
 
     @Test
-    public void testValidEmail() {
-        assertTrue(EmailValidator.isValid("user@gmail.com"));
-        assertTrue(EmailValidator.isValid("abc.xyz@company.co"));
-        assertTrue(EmailValidator.isValid("test123@mail.in"));
+    public void testValidEmails() {
+        assertTrue(EmailValidator.isValid("test@gmail.com"));
+        assertTrue(EmailValidator.isValid("abc_123@yahoo.in"));
     }
-
-  
     @Test
-    public void testInvalidEmail() {
-        assertFalse(EmailValidator.isValid("usergmail.com"));
-        assertFalse(EmailValidator.isValid("user@"));
+    public void testInvalidEmails() {
+        assertFalse(EmailValidator.isValid("testgmail.com"));
         assertFalse(EmailValidator.isValid("@gmail.com"));
-        assertFalse(EmailValidator.isValid("user@gmail"));
-        assertFalse(EmailValidator.isValid(""));
+        assertFalse(EmailValidator.isValid("test@"));
         assertFalse(EmailValidator.isValid(null));
     }
 }

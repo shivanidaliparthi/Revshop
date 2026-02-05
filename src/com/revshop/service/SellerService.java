@@ -1,159 +1,81 @@
 package com.revshop.service;
-
 import java.util.List;
 import java.util.Scanner;
-
+import org.apache.log4j.Logger;
 import com.revshop.dao.ProductDAO;
 import com.revshop.dao.ReviewDAO;
 import com.revshop.model.Product;
 import com.revshop.model.Review;
-
 public class SellerService {
+
+    private static final Logger logger = Logger.getLogger(SellerService.class);
 
     private ProductDAO productDAO = new ProductDAO();
     private ReviewDAO reviewDAO = new ReviewDAO();
     private NotificationService notify = new NotificationService();
-
     private static final int STOCK_THRESHOLD = 5;
 
     public void sellerMenu(Scanner sc) {
 
+        logger.info("Seller menu opened");
+
         int ch;
         do {
-            System.out.println("\n--- SELLER MENU ---");
-            System.out.println("1. Add Product");
-            System.out.println("2. View Products");
-            System.out.println("3. View Customer Reviews");
-            System.out.println("4. Check Stock Threshold");
-            System.out.println("5. Exit");
-
             ch = sc.nextInt();
-
-            switch (ch) {
-                case 1:
-                    addProduct(sc);
-                    break;
-                case 2:
-                    viewProducts();
-                    break;
-                case 3:
-                    viewReviews();
-                    break;
-                case 4:
-                    checkStockThreshold();
-                    break;
-                case 5:
-                    System.out.println("Seller logged out");
-                    break;
-                default:
-                    System.out.println("Invalid option");
+            try {
+                switch (ch) {
+                    case 1:
+                        addProduct(sc);
+                        break;
+                    case 2:
+                        viewProducts();
+                        break;
+                    case 3:
+                        viewReviews();
+                        break;
+                    case 4:
+                        checkStockThreshold();
+                        break;
+                }
+            } catch (Exception e) {
+                logger.error("Error in seller menu", e);
             }
-
         } while (ch != 5);
     }
 
     private void addProduct(Scanner sc) {
-
-        System.out.print("Product Name: ");
-        sc.nextLine();
-        String name = sc.nextLine();
-
-        System.out.print("Category: ");
-        String category = sc.nextLine();
-
-        System.out.print("MRP: ");
-        double mrp = sc.nextDouble();
-
-        System.out.print("Discount (%): ");
-        double discount = sc.nextDouble();
-
-        System.out.print("Stock: ");
-        int stock = sc.nextInt();
-
-        Product product = new Product(
-                productDAO.nextId(),
-                name,
-                category,
-                mrp,
-                discount,
-                stock
+        Product p = new Product(
+            productDAO.nextId(),
+            sc.next(),
+            sc.next(),
+            sc.nextDouble(),
+            sc.nextDouble(),
+            sc.nextInt()
         );
+        productDAO.addProduct(p);
+        logger.info("Product added: " + p.getName());
 
-        // ✅ FIXED LINES (ONLY)
-        boolean added = productDAO.addProduct(product);
-
-        if (added) {
-            notify.notifySeller("Product added successfully");
-        } else {
-            notify.notifySeller("❌ Product NOT added");
-        }
-
-        if (stock <= STOCK_THRESHOLD) {
-            notify.notifySeller(
-                "⚠ LOW STOCK ALERT for product: " + name
-            );
+        if (p.getStock() <= STOCK_THRESHOLD) {
+            logger.warn("Low stock for product: " + p.getName());
+            notify.notifySeller("LOW STOCK ALERT");
         }
     }
 
     private void viewProducts() {
-
         List<Product> products = productDAO.getAll();
-
-        if (products.isEmpty()) {
-            System.out.println("No products available");
-            return;
-        }
-
-        System.out.println("\n--- PRODUCT LIST ---");
-        for (Product p : products) {
-            System.out.println(
-                "ID: " + p.getId() +
-                " | Name: " + p.getName() +
-                " | Category: " + p.getCategory() +
-                " | MRP: " + p.getMrp() +
-                " | Discount: " + p.getDiscount() + "%" +
-                " | Seller Price: ₹" + p.getSellingPrice() +
-                " | Stock: " + p.getStock()
-            );
-        }
+        logger.info("Viewing products count=" + products.size());
     }
 
     private void viewReviews() {
-
         List<Review> reviews = reviewDAO.getAll();
-
-        if (reviews.isEmpty()) {
-            System.out.println("No customer reviews yet");
-            return;
-        }
-
-        System.out.println("\n--- CUSTOMER REVIEWS ---");
-        for (Review r : reviews) {
-            System.out.println(
-                "Product ID: " + r.getProductId() +
-                " | Rating: " + r.getRating() +
-                " | Comment: " + r.getReviewComment()
-            );
-        }
+        logger.info("Viewing reviews count=" + reviews.size());
     }
 
     private void checkStockThreshold() {
-
-        List<Product> products = productDAO.getAll();
-        boolean alert = false;
-
-        for (Product p : products) {
+        for (Product p : productDAO.getAll()) {
             if (p.getStock() <= STOCK_THRESHOLD) {
-                notify.notifySeller(
-                    "⚠ LOW STOCK: " + p.getName() +
-                    " (Stock: " + p.getStock() + ")"
-                );
-                alert = true;
+                logger.warn("Low stock: " + p.getName());
             }
-        }
-
-        if (!alert) {
-            System.out.println("All products have sufficient stock");
         }
     }
 }
